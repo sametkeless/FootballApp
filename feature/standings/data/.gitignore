@@ -1,0 +1,54 @@
+# Android Studio
+*.iml
+.gradle/
+build/
+local.properties
+/.idea
+/.idea/*
+*.hprof
+captures/
+output.json
+
+# Generated files
+*.class
+*.dex
+*.apk
+*.ap_
+*.jar
+*.keystore
+*.jks
+*.so
+*.swp
+
+# Kotlin specific
+*.kotlin_metadata
+*.kotlin_bin
+
+# Gradle
+.gradle/
+build/
+**/build/
+**/out/
+**/bin/
+
+# Android specific
+*.log
+*.tmp
+*.temp
+*.orig
+
+# Dagger Hilt
+hilt/
+hilt-logs/
+
+# User-specific files
+.idea/*
+*.user
+*.sublime-workspace
+*.sublime-project
+
+# Misc
+*.DS_Store
+*.class
+*.log
+*.hprof

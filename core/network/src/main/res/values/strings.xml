@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="err_empty">Sonuç bulunamadı.</string>
+    <string name="err_general">Genel bir sonuç oluştu. Lütfen daha sonra tekrar deneyiniz.</string>
+    <string name="err_connection">Bağlantınızı kontrol edip tekrar deneyiniz.</string>
+</resources>
