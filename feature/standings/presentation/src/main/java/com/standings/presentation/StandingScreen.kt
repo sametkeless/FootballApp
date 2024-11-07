@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -14,7 +15,7 @@ import com.core.ui.NetworkImageView
 import com.standings.domain.model.StandingModel
 
 @Composable
-fun StandingScreen(viewModel: StandingViewModel = hiltViewModel()) {
+internal fun StandingScreen(viewModel: StandingViewModel = hiltViewModel()) {
     val standingData = viewModel.standingData.collectAsState()
     val standingStateUIModel = standingData.value
 
@@ -22,15 +23,17 @@ fun StandingScreen(viewModel: StandingViewModel = hiltViewModel()) {
         when (standingStateUIModel) {
             is StandingUiState.Error -> {
                 Text(
-                    text = "Bir hata oluştu: ${standingStateUIModel.error}",
+                    text = stringResource(standingStateUIModel.error),
                     color = Color.Red,
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold
                 )
             }
+
             is StandingUiState.Loading -> {
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
+
             is StandingUiState.Success -> {
                 StandingCard(standingStateUIModel.uiModel)
             }
@@ -39,7 +42,7 @@ fun StandingScreen(viewModel: StandingViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun StandingCard(standingModel: StandingModel) {
+internal fun StandingCard(standingModel: StandingModel) {
     Card(
         modifier = Modifier
             .padding(16.dp)
@@ -89,7 +92,7 @@ fun StandingCard(standingModel: StandingModel) {
 }
 
 @Composable
-fun TextInfoRow(label: String, value: String) {
+internal fun TextInfoRow(label: String, value: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

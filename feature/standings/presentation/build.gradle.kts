@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.hiltPlugin)
     alias(libs.plugins.kspPlugin)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -40,11 +41,14 @@ dependencies {
     implementation(project(":core:base"))
     implementation(project(":core:ui"))
     implementation(project(":feature:standings:domain"))
+    implementation(project(":feature:standings:data"))
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.hilt.navigation.compose)
-
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit)
     implementation(libs.converter.name)
 

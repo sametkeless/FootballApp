@@ -59,12 +59,8 @@ dependencies {
     implementation(libs.androidx.material3.android)
 
     implementation(project(":core:ui"))
-
     implementation(project(":feature:team:presentation"))
-    implementation(project(":feature:team:data"))
-
     implementation(project(":feature:standings:presentation"))
-    implementation(project(":feature:standings:data"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 }

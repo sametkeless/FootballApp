@@ -7,16 +7,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.team.domain.model.TeamInfoModel
 
 @Composable
-fun TeamScreen(
+internal fun TeamScreen(
     viewModel: TeamViewModel = hiltViewModel(),
     onTeamSelected: (Int) -> Unit
 ) {
@@ -28,20 +31,23 @@ fun TeamScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        SearchScreen(onQueryChange = { query ->
-            viewModel.onSearchQueryChanged(query) // Kullanıcı sorgusunu ViewModel'e gönder
+        SearchScreen(viewModel.query, onQueryChange = { query ->
+            viewModel.onSearchQueryChanged(query)
         })
 
         when (teamStateUIModel) {
             is TeamUiState.Success -> {
                 if (teamStateUIModel.uiModel.teamInfoList.isNotEmpty()) {
-                    TeamList(teams = teamStateUIModel.uiModel.teamInfoList, onClickListener = onTeamSelected)
+                    TeamList(
+                        teams = teamStateUIModel.uiModel.teamInfoList,
+                        onClickListener = onTeamSelected
+                    )
                 }
             }
 
             is TeamUiState.Error -> {
                 Text(
-                    text = "Bir hata oluştu: ${teamStateUIModel.error}",
+                    text = stringResource(teamStateUIModel.error),
                     color = Color.Red,
                     modifier = Modifier.fillMaxSize(),
                     style = MaterialTheme.typography.bodyLarge,
@@ -61,22 +67,21 @@ fun TeamScreen(
 }
 
 @Composable
-fun SearchScreen(onQueryChange: (String) -> Unit) {
-    var query by remember { mutableStateOf("") }
-
+internal fun SearchScreen(query: MutableState<String>, onQueryChange: (String) -> Unit) {
+    var queryValue by rememberSaveable { query }
     OutlinedTextField(
-        value = query,
+        value = queryValue,
         onValueChange = { newText ->
-            query = newText
-            onQueryChange(query) // Kullanıcı girdisini ViewModel'e gönder
+            queryValue = newText
+            onQueryChange(queryValue)
         },
-        label = { Text("Takım ya da Ülke Ara") },
+        label = { Text(stringResource(R.string.search_hint)) },
         modifier = Modifier.fillMaxWidth()
     )
 }
 
 @Composable
-fun TeamList(teams: List<TeamInfoModel>, onClickListener: (Int) -> Unit) {
+internal fun TeamList(teams: List<TeamInfoModel>, onClickListener: (Int) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -91,7 +96,7 @@ fun TeamList(teams: List<TeamInfoModel>, onClickListener: (Int) -> Unit) {
 }
 
 @Composable
-fun TeamItem(team: TeamInfoModel, onClickListener: (Int) -> Unit) {
+internal fun TeamItem(team: TeamInfoModel, onClickListener: (Int) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

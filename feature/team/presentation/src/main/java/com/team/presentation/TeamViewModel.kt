@@ -2,6 +2,8 @@ package com.team.presentation
 
 import android.app.Application
 import android.content.Context
+import androidx.annotation.StringRes
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.core.base.Resource
@@ -18,9 +20,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TeamViewModel @Inject constructor(
+internal class TeamViewModel @Inject constructor(
     private val useCase: GetTeamsUseCase
 ) : ViewModel() {
+
+    val query = mutableStateOf("")
 
     private val _teamData = MutableStateFlow<TeamUiState>(TeamUiState.Empty)
     val teamData: StateFlow<TeamUiState> = _teamData
@@ -40,8 +44,13 @@ class TeamViewModel @Inject constructor(
                         is Resource.Success -> {
                             _teamData.emit(TeamUiState.Success(resourceFlow.data))
                         }
+
                         is Resource.Error -> {
-                            _teamData.emit(TeamUiState.Error(resourceFlow.error.message ?: "Bilinmeyen Hata"))
+                            resourceFlow.error.resID?.let { errResID ->
+                                _teamData.emit(
+                                    TeamUiState.Error(errResID)
+                                )
+                            }
                         }
                     }
                 }
@@ -52,9 +61,9 @@ class TeamViewModel @Inject constructor(
     }
 }
 
-sealed interface TeamUiState {
+internal sealed interface TeamUiState {
     data object Empty : TeamUiState
     data object Loading : TeamUiState
-    data class Error(val error: String) : TeamUiState
+    data class Error(@StringRes val error: Int) : TeamUiState
     data class Success(val uiModel: TeamInfos) : TeamUiState
 }
